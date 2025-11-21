@@ -9,7 +9,7 @@ import (
 
 type ReplicaGroup struct {
 	leaderId []byte
-	data map[string][]byte
+	data     map[string][]byte
 }
 
 func (n *Node) addRgMembership(id uint64) {
@@ -23,7 +23,7 @@ func (n *Node) addRgMembership(id uint64) {
 		return
 	}
 
-	n.rgs[id] = &ReplicaGroup{leaderId:Uint64ToBytes(id)}
+	n.rgs[id] = &ReplicaGroup{leaderId: Uint64ToBytes(id)}
 	n.rgs[id].data = make(map[string][]byte)
 	return
 }
@@ -94,10 +94,9 @@ func (n *Node) sendReplica(key string) {
 		log.Errorf("sendReplica() exiting since key does not exist in our datastore\n")
 	}
 	// create kv
-	kv := &chordpb.KV{Key:key, Value:val}
+	kv := &chordpb.KV{Key: key, Value: val}
 	// create replicaMsg
-	replicaMsg := &chordpb.ReplicaMsg{LeaderId:n.Id, Kv:[]*chordpb.KV{kv}}
-
+	replicaMsg := &chordpb.ReplicaMsg{LeaderId: n.Id, Kv: []*chordpb.KV{kv}}
 
 	// send kv to replica group
 	n.succListMtx.RLock()
@@ -107,7 +106,7 @@ func (n *Node) sendReplica(key string) {
 		if bytes.Equal(node.Id, n.Id) {
 			continue
 		}
-		n.SendReplicasRPC(node,replicaMsg)
+		n.SendReplicasRPC(node, replicaMsg)
 	}
 }
 
@@ -125,12 +124,12 @@ func (n *Node) sendAllReplicas() {
 	kvs := make([]*chordpb.KV, len(n.rgs[leaderID].data))
 	index := 0
 	for k, v := range n.rgs[leaderID].data {
-		kvs[index] = &chordpb.KV{Key:k, Value:v}
+		kvs[index] = &chordpb.KV{Key: k, Value: v}
 		index++
 	}
 
 	// create replicaMsg
-	replicaMsg := &chordpb.ReplicaMsg{LeaderId:n.Id, Kv: kvs}
+	replicaMsg := &chordpb.ReplicaMsg{LeaderId: n.Id, Kv: kvs}
 
 	// send kvs to replica group
 	n.succListMtx.RLock()
@@ -140,7 +139,7 @@ func (n *Node) sendAllReplicas() {
 		if bytes.Equal(node.Id, n.Id) {
 			continue
 		}
-		n.SendReplicasRPC(node,replicaMsg)
+		n.SendReplicasRPC(node, replicaMsg)
 	}
 }
 
@@ -150,13 +149,13 @@ func (n *Node) moveReplicas(fromId uint64, toId uint64) {
 	n.rgsMtx.Lock()
 	defer n.rgsMtx.Unlock()
 
-	_ , ok := n.rgs[fromId]
+	_, ok := n.rgs[fromId]
 	if !ok {
 		log.Errorf("moveReplicas(from: %d, to: %d) exiting since fromId is not a current replica group leader\n", fromId, toId)
 		return
 	}
 
-	_ , ok = n.rgs[toId]
+	_, ok = n.rgs[toId]
 	if !ok {
 		log.Errorf("moveReplicas(from: %d, to: %d) exiting since toId is not a current replica group leader\n", fromId, toId)
 		return
@@ -184,7 +183,7 @@ func (n *Node) moveKeys(fromId []byte, toId []byte) []*chordpb.KV {
 	for k, v := range n.rgs[fromId_uint].data {
 		hash = GetPeerID(k, n.config.KeySize)
 		if !BetweenRightIncl(hash, toId, fromId) {
-			kvs = append(kvs, &chordpb.KV{Key:k, Value:v})
+			kvs = append(kvs, &chordpb.KV{Key: k, Value: v})
 			// remove kv from our data store
 			//delete(n.rgs[fromId_uint].data, k)
 			// SEND REMOVE TO OUR RG
@@ -209,7 +208,7 @@ func (n *Node) removeKeys(fromId []byte, toId []byte) []*chordpb.KV {
 			// remove kv from our data store
 			delete(n.rgs[fromId_uint].data, k)
 			// append to list tracking which keys we have removed
-			kvs = append(kvs, &chordpb.KV{Key:k, Value:v})
+			kvs = append(kvs, &chordpb.KV{Key: k, Value: v})
 		}
 	}
 	return kvs

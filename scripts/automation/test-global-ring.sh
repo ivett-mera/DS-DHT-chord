@@ -6,7 +6,7 @@
 set -e
 
 # IPs de las VMs
-VM1_IP="34.38.96.126"    # Europa (Bootstrap)
+VM1_IP="34.175.112.12"    # Europa (Bootstrap)
 VM2_IP="35.199.69.216"   # Sudamérica  
 VM3_IP="34.58.253.117"   # US Central
 

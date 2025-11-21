@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/cdesiniotis/chord/chordpb"
 	"github.com/cdesiniotis/chord"
+	"github.com/cdesiniotis/chord/chordpb"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"

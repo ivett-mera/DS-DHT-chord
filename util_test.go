@@ -113,13 +113,13 @@ func TestDistance(t *testing.T) {
 func TestCompareSuccessorLists(t *testing.T) {
 	var res bool
 
-	a := []*chordpb.Node{ {Id:[]byte{69}}, {Id:[]byte{118}}}
-	b := []*chordpb.Node{ {Id:[]byte{69}}, {Id:[]byte{118}}}
+	a := []*chordpb.Node{{Id: []byte{69}}, {Id: []byte{118}}}
+	b := []*chordpb.Node{{Id: []byte{69}}, {Id: []byte{118}}}
 	res = CompareSuccessorLists(a, b)
 	assert.True(t, res, "comparing both successor lists should result in true")
 
-	a = []*chordpb.Node{ {Id:[]byte{69}}, {Id:[]byte{118}}}
-	b = []*chordpb.Node{ {Id:[]byte{69}}, {Id:[]byte{119}}}
+	a = []*chordpb.Node{{Id: []byte{69}}, {Id: []byte{118}}}
+	b = []*chordpb.Node{{Id: []byte{69}}, {Id: []byte{119}}}
 	res = CompareSuccessorLists(a, b)
 	assert.False(t, res, "comparing both successor lists should result in false")
 }

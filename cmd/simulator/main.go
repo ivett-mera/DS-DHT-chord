@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/cdesiniotis/chord/chordpb"
 	"github.com/cdesiniotis/chord"
+	"github.com/cdesiniotis/chord/chordpb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
